@@ -17,6 +17,7 @@
 
 .equ UARTDATA, 0x10001000
 .equ UARTCONTROL, 0x10001004
+.equ so, 0x100000
 
 .global _start
 
@@ -47,9 +48,13 @@ PULA_CRONOMETRO:
 
 SWITCH_COMMAND:
     movia r21, BUFFER_ENTRADA # resetando r21 para apontar para o primeiro elemento do vetor
-    ldb r18, (r21)            # lendo o primeiro byte do vetor de caracteres
+    ldw r23, (r21)            # lendo o primeiro byte do vetor de caracteres
 
-    addi r21, r21, 1          # apontando par ao segundo elemento do ponteiro
+    andi r18, r23, 0xFF
+
+    addi r21, r21, 1          # apontando para o segundo elemento do ponteiro
+
+    stw r23, (sp)
 
     movi r19, '0'
     beq r18, r19, PULA_ACENDE_APAGA
