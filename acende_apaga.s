@@ -5,16 +5,33 @@
 
 ACENDE_APAGA:
 
-    ldw r12, (sp)
+    movia r12, STATUS_LEDS
 
-    addi r13, r12, 0xFF
+    ldw r11,(r12)   # carregando o estado dos leds
 
     movia r8, ENDERECO_LED_VERMELHO
 
     movia r10, POSICAO_LED_VERMELHO
 
-    sll r10, r10, r11
+    movi r13, '1'
 
-    stwio r10, (r8)
+    sll r10, r10, r2
+
+    beq r3, r13, APAGA_LED
+
+ACENDE_LED:
+    or r11, r11, r10    # guardando os estados dos leds
+    br SALVA_LED
+
+APAGA_LED:
+    nor r10,r10,r10     
+    and r11,r11,r10     # guardando os estados dos leds
+
+SALVA_LED:
+    stwio r11, (r8)
+
+    stw r11,(r12)
 
     ret
+
+ STATUS_LEDS: .word 0   # guardando os status dos leds
