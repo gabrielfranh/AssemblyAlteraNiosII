@@ -27,6 +27,12 @@ ECO:
     movia r13, ENDERECO_CHAVE
     stwio r0, (r15)         # set T0 = 0
 
+
+    movia et, FLAG_ANIMACAO
+    ldb et, (et)
+
+    bne et, r0, FIM_ECO     
+    
     ldwio r13,(r13)  # carregando as chaves
 
     andi r13,r13,0x1 # mascara da chave SW0
@@ -63,7 +69,8 @@ SENTIDO_ANTI_HORARIO:
     movia r8, ENDERECO_LED_VERMELHO
 
     stwio r15, (r8)
-    
+FIM_ECO:
+
 ret
 
 ESTADOS_LEDS: .word 1

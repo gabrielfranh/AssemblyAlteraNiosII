@@ -5,6 +5,24 @@
 
 ACENDE_APAGA:
 
+    movia r21, BUFFER_ENTRADA # resetando r21 para apontar para o primeiro elemento do vetor
+
+    ldb  r20,3(r21)            # pegando o primeiro número do parâmetro
+
+    ldb  r22,4(r21)            # pegando o segundo número do parâmetro
+
+    addi r20, r20,-0x30           # subtraindo o código asc para se tornar um número
+
+    slli r23,r20,3
+
+    slli r20,r20,1
+
+    add r20,r23,r20
+
+    addi r22, r22,-0x30           # subtraindo o código asc para se tornar um número
+
+    add r2, r20, r22            # Parâmetro da sub rotina
+
     movia r12, STATUS_LEDS
 
     ldw r11,(r12)   # carregando o estado dos leds
