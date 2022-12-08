@@ -31,7 +31,7 @@ ACENDE_APAGA:
 
     movia r10, POSICAO_LED_VERMELHO
 
-    movi r13, '1'
+    movi r13, 1
 
     sll r10, r10, r2
 

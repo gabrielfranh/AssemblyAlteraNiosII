@@ -32,7 +32,7 @@ ECO:
     ldb et, (et)
 
     bne et, r0, FIM_ECO     
-    
+
     ldwio r13,(r13)  # carregando as chaves
 
     andi r13,r13,0x1 # mascara da chave SW0

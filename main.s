@@ -90,25 +90,6 @@ SWITCH_COMMAND:
 
     addi r3,r3,-0x30
 
-/*
-    ldb  r20,3(r21)            # pegando o primeiro número do parâmetro
-
-    ldb  r22,4(r21)            # pegando o segundo número do parâmetro
-
-    addi r20, r20,-0x30           # subtraindo o código asc para se tornar um número
-
-    slli r23,r20,3
-
-    slli r20,r20,1
-
-    add r20,r23,r20
-
-    addi r22, r22,-0x30           # subtraindo o código asc para se tornar um número
-
-    add r2, r20, r22            # Parâmetro da sub rotina
-*/
-    # addi r21, r21, 1          # apontando para o segundo elemento do ponteiro
-
     movi r19, '0'
     beq r18, r19, PULA_ACENDE_APAGA
 
