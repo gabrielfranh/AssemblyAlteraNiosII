@@ -16,11 +16,37 @@
     andi r13, et, 1         # checa se irq1 (TEMPORIZADOR) foi ativado
     beq r13, r0, RETORNO    # caso contrario retorna
 
+    call IRQ_CRONOMETRO
     call ECO           # chama função que trata a interrupção do TEMPORIZADOR
 RETORNO:
     ldw ra, (sp)
     addi  sp, sp, 4
 eret
+
+IRQ_CRONOMETRO:
+    addi  sp, sp, -4
+    stw ra, (sp)
+
+    movia  r15,CRO_COUNTER
+
+    ldw r13, (r15)
+
+    addi r13, r13, 1
+
+    movi et,5
+
+    bne r13, et, CONTINUA_CRONOMETRO
+
+    call CRONOMETRO
+
+    movi r13,0
+
+    CONTINUA_CRONOMETRO:
+    stw r13,(r15)
+
+    ldw ra, (sp)
+    addi  sp, sp, 4
+ret
 
 ECO:
     movia r15, TEMPORIZADOR
@@ -74,3 +100,5 @@ FIM_ECO:
 ret
 
 ESTADOS_LEDS: .word 1
+
+CRO_COUNTER: .word 0

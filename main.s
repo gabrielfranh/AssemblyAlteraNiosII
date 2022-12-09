@@ -17,9 +17,7 @@
 
 /*
     FALTA FAZER:
-    AJUSTAR R2 E R3 PARA SER USADO COMO PARAMETRO SOMENTE DETRO DA DIRETIVA ACENDE_APAGA
-
-    LOAD NA FLAG FLAG_ANIMAÇÃO DENTRO DO ARQUIVO ANIMAÇÃO PARA VER SE VAI FAZER OU NÃO A ANIMAÇÃO
+    VERIFICAR O METODO IRQ_CRONOMETRO PARA IMPRIMIR NO DISPLAY DE 7 SEG DE 1 EM 1 SEGUNDO, PARECE ESTAR IMPRIMINDO DE 200MS IGUAL AOS LEDS
 */
 
 .equ UARTDATA, 0x10001000
@@ -58,8 +56,8 @@ movia r9, TEMPORIZADOR
 br POLLING
 
 PULA_ACENDE_APAGA:
-    movia r23,FLAG_ANIMACAO
-    movi r18,1
+    movia r23, FLAG_ANIMACAO
+    movi r18, 1
     stb r18,(r23)
     call ACENDE_APAGA
     mov r22, r0     # resetando o ponteiro para o  buffer de entrada
@@ -74,7 +72,8 @@ PULA_ANIMACAO:
     br POLLING
 
 PULA_CRONOMETRO:
-    call CRONOMETRO
+    movia r23,FLAG_CRONOMETRO
+    stb r3, (r23)
     mov r22, r0     # resetando o ponteiro para o  buffer de entrada
 
     br POLLING
@@ -124,6 +123,8 @@ POLLING:
 BUFFER_ENTRADA:
     .skip 10 # Máximo de 10 caracteres para tratar
 
-.global FLAG_ANIMACAO
+.global FLAG_CRONOMETRO
+FLAG_CRONOMETRO: .byte 1
 
+.global FLAG_ANIMACAO
 FLAG_ANIMACAO: .byte 1
