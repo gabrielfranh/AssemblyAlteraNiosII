@@ -15,16 +15,13 @@
     r23 -> Tecla ENTER
 */
 
-/*
-    FALTA FAZER:
-    VERIFICAR O METODO IRQ_CRONOMETRO PARA IMPRIMIR NO DISPLAY DE 7 SEG DE 1 EM 1 SEGUNDO, PARECE ESTAR IMPRIMINDO DE 200MS IGUAL AOS LEDS
-*/
-
 .equ UARTDATA, 0x10001000
 .equ UARTCONTROL, 0x10001004
 .equ STACKPOINTER, 0x100000
 .equ TEMPO, 10000000 # 200ms
 .equ TEMPORIZADOR, 0x10002000
+.equ PB_INTERRUPT,       0x58
+.equ IO_BASE,0x10000000 
 
 .global _start
 
@@ -33,21 +30,24 @@ _start:
 movia r16, UARTDATA     # r8 <- &uartdata
 movia r17, UARTCONTROL # r10 <- &uartcontrol
 movia sp, STACKPOINTER
+movia r18, PB_INTERRUPT
+movia r19, IO_BASE
 
 movia r9, TEMPORIZADOR
     movia r10, TEMPO
+    
+    movi r18, 2
+    stwio r18, PB_INTERRUPT(r19)    # Habilitando interrupção para o push button
 
     andi r11, r10, 0xffff # low
     srli r12, r10, 16     # high    
     stwio r11, 8(r9)   # set counter start value (low)
     stwio r12, 12(r9)   # set counter start value (high)
-
-    # habilitar a interrupção do key 1 e 2
     movi r14, 7           # r14 <- 7 (mascara para start cont e ito)
     stwio r14, 4(r9)     # habilita start cont e ito
     
     # habilitar a interrupção do temporizador no ienable
-    movi r14, 1
+    movi r14, 3
     wrctl ienable, r14
 
     # habilitar o bit PIE do status

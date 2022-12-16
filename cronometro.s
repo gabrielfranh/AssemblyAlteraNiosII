@@ -11,7 +11,21 @@ CRONOMETRO:
     movia et, FLAG_CRONOMETRO
     ldb et, (et)
 
-    bne et, r0, FIM_CRONOMETRO
+    bne et, r0, ZERAR_CRONOMETRO
+
+/**
+    O rótulo abaixo atualiza o contador de unidades de segundos,
+    dezenas de segundos, unidades de minutos e dezenas de minutos.
+    Cada vez que a unidade de segundo está em 9, ao somar adiciona uma dezena de segundo.
+    A mesma coisa acontece nas unidade de minutos. Já a dezena de segundo faz esse processo
+    ao ter valor 5 e somar 1
+**/
+
+    movia r13, PAUSA_CRONOMETRO
+    ldb r14, (r13)
+
+    bne r14, r0, FIM_CRONOMETRO
+
 
     ADICIONA_UNIDADE_SEGUNDO:
         movia r13, UNI_SEG
@@ -52,16 +66,19 @@ CRONOMETRO:
         stw r14,(r13)
         bne r14,r15, FIM_CRONOMETRO
 
-/*
-    movi  r10, 6                     # valor utilizado para atualizar apenas o key1 e key2
-    stwio r10, PB_INTERRUPT(r9)      # habilitando interrupção do key1
+ZERAR_CRONOMETRO:
+    movia r13, UNI_SEG      
+    stw r0,(r13)        # Zerando unidade de segundo de display de 7 segmentos
 
-    wrctl ienable, r10               # habilitando o PB no ienable (ctl3)
+    movia r13, DEZ_SEG
+    stw r0,(r13)        # Zerando dezena de segundo de display de 7 segmentos
 
-    movi  r10, 1
+    movia r13, UNI_MIN
+    stw r0,(r13)        # Zerando unidade de minuto de display de 7 segmentos
 
-    wrctl status, r10                # habilitando o bit PIE do registrador status (ctl0)
-*/
+    movia r13, DEZ_MIN
+    stw r0,(r13)        # Zerando dezena de minuto de display de 7 segmentos
+
 FIM_CRONOMETRO:
 
 # visualição
